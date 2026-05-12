@@ -69,5 +69,9 @@ target_link_libraries(OpenGLFramework PUBLIC
     glfw
     OpenMeshCore
     OpenMeshTools
-    opengl32
 )
+if (WIN32)
+    target_link_libraries(OpenGLFramework PUBLIC opengl32)
+elseif(UNIX)
+    target_link_libraries(OpenGLFramework PUBLIC GL)
+endif()
