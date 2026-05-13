@@ -22,6 +22,7 @@ FetchContent_Declare(
     OpenMesh
     GIT_REPOSITORY https://github.com/Lawrencemm/openmesh
     GIT_TAG master
+    PATCH_COMMAND git apply "${CMAKE_SOURCE_DIR}/openmesh_subdiv_mod.patch"
 )
 
 FetchContent_MakeAvailable(OpenMesh)
