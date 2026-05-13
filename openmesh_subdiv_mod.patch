@@ -1,0 +1,23 @@
+diff --git a/src/OpenMesh/Tools/Subdivider/Uniform/CatmullClarkT.cc b/src/OpenMesh/Tools/Subdivider/Uniform/CatmullClarkT.cc
+index 1813c2fe..44990b25 100644
+--- a/src/OpenMesh/Tools/Subdivider/Uniform/CatmullClarkT.cc
++++ b/src/OpenMesh/Tools/Subdivider/Uniform/CatmullClarkT.cc
+@@ -340,13 +340,11 @@ CatmullClarkT<MeshType,RealType>::update_vertex( MeshType& _m, const VertexHandl
+   // and http://www.cs.utah.edu/~lacewell/subdeval
+   if ( _m.is_boundary( _vh))
+   {
+-    Normal   Vec;
+-    pos = _m.point(_vh);
+-    VertexEdgeIter   ve_itr;
+-    for ( ve_itr = _m.ve_iter( _vh); ve_itr.is_valid(); ++ve_itr)
+-      if ( _m.is_boundary( *ve_itr))
+-        pos += _m.property( ep_pos_, *ve_itr);
+-    pos /= static_cast<typename vector_traits<typename MeshType::Point>::value_type>(3.0);
++    pos = _m.point(_vh) * 6.0f;
++    for (auto voh : _m.voh_range(_vh))
++    if (_m.is_boundary(_m.edge_handle(voh)))
++    pos += _m.point(_m.to_vertex_handle(voh));
++    pos /= static_cast<typename vector_traits<typename MeshType::Point>::value_type>(8.0);
+   }
+   else // inner vertex
+   {
