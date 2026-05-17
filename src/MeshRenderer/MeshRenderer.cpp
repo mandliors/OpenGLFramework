@@ -34,15 +34,15 @@ auto MeshRenderer::UpdateGPU() -> void
 	std::vector<PosNormVertex> gpuData;
 	for (auto f : m_mesh.faces())
 	{
-		auto fn = m_mesh.normal(f);
-
 		std::vector<PolyMesh::Point> pos;
 		for (auto fv : m_mesh.fv_range(f))
 			pos.push_back(m_mesh.point(fv));
 
+		auto fn = m_mesh.normal(f);
+		glm::vec3 n{(float)fn[0], (float)fn[1], (float)fn[2]};
+		
 		if (pos.size() == 3)
 		{
-			glm::vec3 n{(float)fn[0], (float)fn[1], (float)fn[2]};
 			for (int i = 0; i < 3; i++)
 			{
 				glm::vec3 p{(float)pos[i][0], (float)pos[i][1], (float)pos[i][2]};
@@ -53,8 +53,6 @@ auto MeshRenderer::UpdateGPU() -> void
 		{
 			for (size_t i = 1; i + 1 < pos.size(); i++)
 			{
-				glm::vec3 n{(float)fn[0], (float)fn[1], (float)fn[2]};
-
 				glm::vec3 p0{(float)pos[0][0], (float)pos[0][1], (float)pos[0][2]};
 				glm::vec3 p1{(float)pos[i][0], (float)pos[i][1], (float)pos[i][2]};
 				glm::vec3 p2{(float)pos[i + 1][0], (float)pos[i + 1][1], (float)pos[i + 1][2]};
@@ -87,7 +85,7 @@ auto MeshRenderer::UpdateGPU() -> void
 	// -------------------- Upload to GPU -----------------------
 	// Structural VBO
 	glBindBuffer(GL_ARRAY_BUFFER, m_structuralVbo);
-	glBufferData(GL_ARRAY_BUFFER, uniquePositions.size() * sizeof(PosVertex), uniquePositions.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, uniquePositions.size() * sizeof(PosVertex), uniquePositions.data(), GL_DYNAMIC_DRAW);
 
 	// Face VBO
 	glBindBuffer(GL_ARRAY_BUFFER, m_faceVbo);
@@ -97,11 +95,11 @@ auto MeshRenderer::UpdateGPU() -> void
 
 	// Edge EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_edgeEbo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, edgeIndices.size() * sizeof(uint32_t), edgeIndices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, edgeIndices.size() * sizeof(uint32_t), edgeIndices.data(), GL_DYNAMIC_DRAW);
 
 	// Point EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_pointEbo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, pointIndices.size() * sizeof(uint32_t), pointIndices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, pointIndices.size() * sizeof(uint32_t), pointIndices.data(), GL_DYNAMIC_DRAW);
 }
 auto MeshRenderer::Draw(const RenderState &state) const -> void
 {
