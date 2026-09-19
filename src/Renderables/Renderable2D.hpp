@@ -4,7 +4,7 @@
 #include "Geometry/Geometry.hpp"
 #include "MeshRenderer/SpecialVertexDatas.hpp"
 
-class Renderable2D : public Geometry<glm::vec2, Vertex2DUniformedAttribs>, Renderable
+class Renderable2D : public Geometry<glm::vec2, Vertex2DUniformedAttribs>, public Renderable
 {
 public:
 	Renderable2D(Shader &shader, GLenum type, const glm::vec4 &color)
