@@ -3,6 +3,8 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
+#include <string>
+#include <string_view>
 #include <print>
 #include <chrono>
 
@@ -17,6 +19,7 @@ public:
 
 	auto Init() -> bool;
 	auto SetTargetFPS(uint32_t fps) -> void { m_targetFrameTime = fps > 0 ? 1.0 / fps : -1.0; }
+	auto SetUiScale(float scale) -> void;
 	auto Run() -> void;
 	auto Destroy() -> void;
 
@@ -33,6 +36,10 @@ protected:
 	virtual auto OnMouseMotion(int x, int y) -> void {}
 
 	virtual auto OnTimeElapsed([[maybe_unused]] double dt) -> void {}
+
+	virtual auto OnImGuiInit() -> void;
+	virtual auto OnImGuiRender() -> void;
+	virtual auto OnImGuiDestroy() -> void;
 
 	auto Invalidate() -> void { m_screenRefresh = true; }
 
