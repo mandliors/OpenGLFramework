@@ -8,6 +8,16 @@ class DebugRenderer
 public:
     static auto Add(std::string_view name, std::unique_ptr<Renderable> renderable) -> void;
     static auto Get(std::string_view name) -> Renderable *;
+
+    template <typename T>
+    static auto GetAs(std::string_view name) -> T *
+    {
+        auto *renderable = Get(name);
+        if (renderable)
+            return dynamic_cast<T *>(renderable);
+        return nullptr;
+    }
+
     static auto Remove(std::string_view name) -> void;
     static auto Clear() -> void;
 
